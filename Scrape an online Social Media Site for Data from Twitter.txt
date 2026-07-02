@@ -1,0 +1,29 @@
+import re
+from collections import Counter
+
+tweets = [
+    "AI is transforming the world!",
+    "Python is great for data science",
+    "I love machine learing",
+    "Big data analytics is powerful",
+    "Spam messages are annoying",
+    "Machine learning and AI are future technologies"
+]
+
+print("\n--- Raw TWEETS ---")
+for t in tweets:
+    print(t)
+
+cleaned_tweets = []
+
+for t in tweets:
+    t = re.sub(r'[^a-zA-Z\s]', '', t)
+    t = t.lower()
+    cleaned_tweets.append(t)
+
+all_words = " ".join(cleaned_tweets).split()
+word_count = Counter(all_words)
+
+print("\n--- TOP WORDS ---")
+for word, freq in word_count.most_common(10):
+    print(word, ":", freq)

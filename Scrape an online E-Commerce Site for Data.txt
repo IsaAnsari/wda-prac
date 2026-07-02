@@ -1,0 +1,23 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops"
+
+response = requests.get(url)
+soup = BeautifulSoup(response.text, "html.parser")
+
+items = soup.find_all("div", class_="thumbnail")
+
+print("\n--- TOP 3 SCRAPED DATA ---")
+
+for item in items[:3]:
+    title = item.find("a", class_="title").text.strip()
+    price = item.find("h4", class_="price").text.strip()
+    rating = item.find("p", class_="review-count").text.strip()
+    
+    print(f"Title: {title}")
+    print(f"Price: {price}")
+    print(f"Rating: {rating}")
+    print("-" * 50)
+
+print("--- SCRAPING COMPLETED ---")

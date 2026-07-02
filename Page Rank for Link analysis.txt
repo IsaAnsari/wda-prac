@@ -1,0 +1,31 @@
+import random
+
+web_graph = {
+    "page1": ["page2", "page3"],
+    "page2": ["page3"],
+    "page3": ["page4"],
+    "page4": ["page1"]
+}
+
+pages = list(web_graph.keys())
+visit_count = {page: 0 for page in pages}
+num_steps = 10000
+current_page = random.choice(pages)
+
+for i in range(num_steps):
+    visit_count[current_page] += 1
+    
+    if len(web_graph[current_page]) == 0:
+        current_page = random.choice(pages)
+    else:
+        current_page = random.choice(web_graph[current_page])
+
+page_rank = {page: count / num_steps for page, count in visit_count.items()}
+
+print("\n---PAGE VISIT COUNTS---")
+for page, count in visit_count.items():
+    print(page, ":", count)
+
+print("\n---PAGE RANK (Random Walk)---")
+for page, rank in page_rank.items():
+    print(page, ":", round(rank, 4))
