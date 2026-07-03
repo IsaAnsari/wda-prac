@@ -1,4 +1,10 @@
 '''
+Sentiment analysis in web data analytics uses natural language processing (NLP) 
+to systematically extract and quantify public emotions, opinions, and attitudes 
+from digital text. It classifies web content—like social media posts, product 
+reviews, and forum threads—into positive, negative, or neutral categories to 
+measure brand reputation and consumer sentiment.
+
 Install:
 
 pip install textblob pandas matplotlib seaborn
