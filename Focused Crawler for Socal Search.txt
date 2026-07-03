@@ -1,0 +1,59 @@
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin, urlparse
+import time
+
+seed_url = "https://en.wikipedia.org/wiki/Artificial_intelligence"
+keywords = ["artificial", "intelligence", "machine", "learning", "data", "algorithm"]
+visited = set()
+queue = [seed_url]
+max_pages = 10
+
+def is_relevant(text):
+    text = text.lower()
+    return any(keyword in text for keyword in keywords)
+
+def fetch_page(url):
+    try:
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(url, headers=headers, timeout=5)
+        soup = BeautifulSoup(response.text, "html.parser")
+        return soup
+    except:
+        return None
+
+def extract_links(soup, base_url):
+    links = []
+    for a in soup.find_all('a', href=True):
+        link = urljoin(base_url, a['href'])
+        if urlparse(link).netloc == urlparse(seed_url).netloc:
+            links.append(link)
+    return links
+
+print("\n🔍 Starting Focused Crawling...\n")
+
+while queue and len(visited) < max_pages:
+    url = queue.pop(0)
+    if url in visited:
+        continue
+        
+    print("Crawling:", url)
+    visited.add(url)
+    
+    soup = fetch_page(url)
+    if soup is None:
+        continue
+        
+    page_text = soup.get_text()
+    if is_relevant(page_text):
+        print("✅ Relevant Page Found:", url)
+        
+    new_links = extract_links(soup, url)
+    for link in new_links:
+        if link not in visited:
+            queue.append(link)
+            
+    time.sleep(1)
+
+print("\n🎯 Crawling Completed!")
+print("Total pages visited:", len(visited))

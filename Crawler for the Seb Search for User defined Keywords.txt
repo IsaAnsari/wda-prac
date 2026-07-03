@@ -1,0 +1,55 @@
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+import time
+
+seed_url = input("Enter seed URL: ")
+keyword = input("Enter keyword to search: ").lower()
+visited = set()
+queue = [seed_url]
+max_pages = 10
+
+def fetch_page(url):
+    try:
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(url, headers=headers, timeout=5)
+        return BeautifulSoup(response.text, "html.parser")
+    except:
+        return None
+
+def contains_keywords(text, keyword):
+    return keyword in text.lower()
+
+def get_links(soup, base_url):
+    links = []
+    for a in soup.find_all('a', href=True):
+        links.append(urljoin(base_url, a['href']))
+    return links
+
+print("\n. Starting Web Crawling...\n")
+
+while queue and len(visited) < max_pages:
+    url = queue.pop(0)
+    if url in visited:
+        continue
+        
+    print("Crawling:", url)
+    visited.add(url)
+    
+    soup = fetch_page(url)
+    if soup is None:
+        continue
+        
+    page_text = soup.get_text()
+    if contains_keywords(page_text, keyword):
+        print("✔ Keyword Found in:", url)
+        
+    links = get_links(soup, url)
+    for link in links:
+        if link not in visited:
+            queue.append(link)
+            
+    time.sleep(1)
+
+print("\n. Crawling Completed!")
+print("Total pages visited:", len(visited))

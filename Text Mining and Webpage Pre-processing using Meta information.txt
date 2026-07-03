@@ -1,0 +1,56 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+import nltk
+import urllib3
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from collections import Counter
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+url = "https://www.geeksforgeeks.org/data-mining/"
+headers = {"User-Agent": "Mozilla/5.0"}
+response = requests.get(url, headers=headers, verify=False)
+html_content = response.text
+
+soup = BeautifulSoup(html_content, "html.parser")
+
+for script in soup(["script", "style"]):
+    script.extract()
+
+title = soup.title.string if soup.title else ""
+meta_description = ""
+meta_keywords = ""
+
+for meta in soup.find_all("meta"):
+    if meta.get("name") == "description":
+        meta_description = meta.get("content", "")
+    if meta.get("name") == "keywords":
+        meta_keywords = meta.get("content", "")
+
+print("\n--- META INFORMATION ---")
+print("Title:", title)
+print("Description:", meta_description)
+print("Keywords:", meta_keywords)
+
+text = soup.get_text()
+
+clean_text = re.sub(r'[^a-zA-Z\s]', '', text)
+clean_text = clean_text.lower()
+tokens = word_tokenize(clean_text)
+
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word not in stop_words and len(word) > 2]
+
+word_freq = Counter(filtered_tokens)
+print("\n--- TOP WORDS ---")
+for word, freq in word_freq.most_common(10):
+    print(f"{word} : {freq}")
+
+combined_text = title + " " + meta_description + " " + meta_keywords
+print("\n--- COMBINED META TEXT ---")
+print(combined_text)

@@ -1,0 +1,68 @@
+'''
+Install:
+
+pip install textblob pandas matplotlib seaborn
+'''
+
+from textblob import TextBlob
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+reviews = [
+    "Great product! Really loved it.",
+    "Worst experience ever. Totally disappointed.",
+    "It's okay, not bad but not great either.",
+    "Amazing quality and fast delivery!",
+    "Terrible customer service.",
+    "Very satisfied with the purchase.",
+    "The product is average."
+]
+
+df = pd.DataFrame(reviews, columns=["Review"])
+
+def get_sentiment(text):
+    polarity = TextBlob(text).sentiment.polarity
+    text_lower = text.lower()
+    neutral_keywords = ["okay", "average", "not bad", "fine", "so so", "moderate"]
+    
+    if any(word in text_lower for word in neutral_keywords):
+        return "Neutral"
+        
+    if polarity > 0.2:
+        return "Positive"
+    elif polarity < -0.2:
+        return "Negative"
+    else:
+        return "Neutral"
+
+df["Sentiment"] = df["Review"].apply(get_sentiment)
+
+print("\n📊 Sentiment Analysis Result:\n")
+print(df)
+
+sentiment_counts = df["Sentiment"].value_counts()
+print("\n📈 Sentiment Counts:\n")
+print(sentiment_counts)
+
+plt.figure(figsize=(6,4))
+sns.barplot(
+    x=sentiment_counts.index,
+    y=sentiment_counts.values,
+    hue=sentiment_counts.index,
+    palette="coolwarm",
+    legend=False
+)
+plt.title("Sentiment Distribution")
+plt.xlabel("Sentiment")
+plt.ylabel("Count")
+plt.show()
+
+plt.figure(figsize=(5,5))
+sentiment_counts.plot.pie(
+    autopct="%1.1f%%",
+    colors=["green", "red", "gray"]
+)
+plt.title("Sentiment Breakdown")
+plt.ylabel("")
+plt.show()

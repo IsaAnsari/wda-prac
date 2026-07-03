@@ -1,0 +1,53 @@
+import os
+import nltk
+from nltk.tokenize import sent_tokenize
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+
+nltk.download('punkt', quiet=True)
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+document = """Artificial Intelligence is transforming industries worldwide.
+Machine learning enables systems to automatically learn and improve from experience.
+Deep learning is a specialized branch of machine learning."""
+
+sentences = sent_tokenize(document)
+
+def search_web(query):
+    return [
+        "Artificial intelligence is rapidly transforming industries across the globe by automating tasks and improving efficiency.",
+        "Machine learning allows computers to learn automatically and improve their performance without being explicitly programmed.",
+        "Deep learning is a subset of machine learning that uses neural networks to model complex patterns."
+    ]
+
+def compute_similarities(sentence, results):
+    embeddings = model.encode([sentence] + results)
+    sentence_emb = embeddings[0].reshape(1, -1)
+    result_embs = embeddings[1:]
+    scores = cosine_similarity(sentence_emb, result_embs)[0]
+    return scores
+
+threshold = 0.75
+plagiarism_results = []
+
+print("\n🔍 Performing Deep Search Plagiarism Detection...\n")
+
+for sentence in sentences:
+    results = search_web(sentence)
+    scores = compute_similarities(sentence, results)
+    for res, score in zip(results, scores):
+        if score > threshold:
+            plagiarism_results.append((sentence, res, score))
+
+if plagiarism_results:
+    for s, r, sim in plagiarism_results:
+        print("⚠ Plagiarism Detected")
+        print("Sentence:", s)
+        print("Matched Text:", r)
+        print("Similarity Score:", round(sim, 2))
+        print("-" * 60)
+else:
+    print("✅ No plagiarism detected.")

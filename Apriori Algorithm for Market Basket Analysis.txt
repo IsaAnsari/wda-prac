@@ -1,0 +1,60 @@
+from itertools import combinations
+
+transactions = [
+    ["milk", "bread", "butter"],
+    ["bread", "butter"],
+    ["milk", "bread"],
+    ["milk", "bread", "butter", "jam"],
+    ["bread", "jam"],
+]
+min_support = 2
+
+def get_items(transactions):
+    items = set()
+    for t in transactions:
+        for item in t:
+            items.add(item)
+    return list(items)
+
+def count_support(itemset, transactions):
+    count = 0
+    for t in transactions:
+        if set(itemset).issubset(set(t)):
+            count += 1
+    return count
+
+def apriori(transactions, min_support):
+    items = get_items(transactions)
+    frequent_itemsets = []
+    current_L = []
+    
+    for item in items:
+        support = count_support([item], transactions)
+        if support >= min_support:
+            current_L.append(([item], support))
+            
+    frequent_itemsets.extend(current_L)
+    k = 2
+    
+    while current_L:
+        candidates = []
+        prev_items = [i[0] for i in current_L]
+        all_items = set(sum(prev_items, []))
+        combs = combinations(all_items, k)
+        
+        for c in combs:
+            support = count_support(c, transactions)
+            if support >= min_support:
+                candidates.append((list(c), support))
+                
+        current_L = candidates
+        frequent_itemsets.extend(current_L)
+        k += 1
+        
+    return frequent_itemsets
+
+results = apriori(transactions, min_support)
+
+print("\n. Frequent Itemsets (Apriori Result)\n")
+for itemset, support in results:
+    print(f"Itemset: {itemset}, Support Count: {support}")
