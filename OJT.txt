@@ -1,0 +1,25 @@
+On-the-Job Training (OJT) in Full Stack Web Development (MERN Stack)
+
+On-the-Job Training (OJT) is a practical training program that enables students to gain real-world industrial experience and apply the theoretical knowledge acquired during their academic studies.
+
+It helps students understand professional work culture, improve technical skills, and prepare for future careers in the IT industry.
+
+I completed my OJT at Code Insight Academy (Branch of Zazpi Tech Pvt. Ltd.) in the domain of Full Stack Web Development (MERN Stack).
+
+The objective of this training was to understand the complete process of developing modern web applications using both frontend and backend technologies.
+
+During the training, I learned HTML, CSS, JavaScript, Bootstrap, React.js, Node.js, Express.js, and MongoDB.
+
+I developed responsive web pages, created reusable React components, understood backend development, database connectivity, REST API development, and CRUD operations. I also learned how frontend and backend communicate to build complete web applications.
+
+As part of the training, I worked on an AI Resume Builder project using the MERN Stack.
+
+The project allowed users to enter personal information, educational details, technical skills, and work experience to generate a professional resume.
+
+Through this project, I gained practical experience in frontend development, backend integration, database management, debugging, and responsive web design.
+
+Apart from technical knowledge, the training also enhanced my communication skills, teamwork, problem-solving ability, time management, and professional attitude.
+
+Working under the guidance of experienced mentors helped me understand industry standards and software development practices.
+
+Overall, this OJT was a valuable learning experience that strengthened my technical knowledge, improved my confidence, and prepared me for future opportunities in Full Stack Web Development and the IT industry.
