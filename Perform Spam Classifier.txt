@@ -1,0 +1,64 @@
+'''
+Create a spam.csv fileas shown below:
+
+label	message
+ham	hello how are you
+spam	Win money now!!
+ham	Let's meet tomorrow
+spam	Claim your free prize
+ham	Are you coming today
+spam	Earn cash quickly
+ham	See you in class
+spam	Congratulations you won lottery
+ham	Call me later
+spam	Free entry in contest
+
+'''
+
+import pandas as pd
+import nltk
+import re
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+
+data = pd.read_csv("spam.csv", sep=",")
+print(data.head())
+
+def preprocess(text):
+    text = re.sub(r'[^a-zA-Z\s]', '', text)
+    text = text.lower()
+    words = word_tokenize(text)
+    stop_words = set(stopwords.words('english'))
+    words = [w for w in words if w not in stop_words and len(w) > 2]
+    return " ".join(words)
+
+data['cleaned'] = data['message'].apply(preprocess)
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(data['cleaned'])
+y = data['label'].map({'ham': 0, 'spam': 1})
+
+model = MultinomialNB()
+model.fit(X, y)
+
+y_pred = model.predict(X)
+print("\n--- RESULTS ---")
+print("Accuracy:", accuracy_score(y, y_pred))
+print("\n-- CLASSIFICATION REPORT ---")
+print(classification_report(y, y_pred, zero_division = 1))
+
+msg = ["Congratulations! You won a free lottery"]
+msg_clean = [preprocess(m) for m in msg]
+msg_vec = vectorizer.transform(msg_clean)
+prediction = model.predict(msg_vec)
+
+print("\n--- CUSTOM MESSAGE TEST ---")
+print("Message:", msg[0])
+print("Prediction:", "Spam" if prediction[0] == 1 else "Ham")
