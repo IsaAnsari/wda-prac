@@ -1,3 +1,8 @@
+'''
+Web crawlers (or spiders/bots) are automated programs that systematically 
+browse the internet to discover, download, and index web content.
+'''
+
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
