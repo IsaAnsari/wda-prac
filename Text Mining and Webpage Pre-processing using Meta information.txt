@@ -1,3 +1,12 @@
+'''
+Text mining is a process of extracting useful information and 
+nontrivial patterns from a large volume of text databases.
+
+Web pre-processing is the crucial step where raw web data is cleaned, 
+structured, and transformed into a high-quality format ready for 
+pattern discovery and user-behavior modeling.
+'''
+
 import requests
 from bs4 import BeautifulSoup
 import re
