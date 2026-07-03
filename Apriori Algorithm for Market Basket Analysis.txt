@@ -1,3 +1,11 @@
+'''
+The Apriori algorithm is a foundational data mining and machine learning 
+technique used for Association Rule Learning. It discovers hidden relationships, 
+dependencies, and frequent combinations among items in large datasets, most 
+famously applied in Market Basket Analysis (e.g., figuring out that customers 
+who buy bread and butter are also highly likely to buy milk).
+'''
+
 from itertools import combinations
 
 transactions = [
