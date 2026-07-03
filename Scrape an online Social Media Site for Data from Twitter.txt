@@ -1,3 +1,8 @@
+'''
+Web scraping is the automated process of extracting unstructured data from 
+websites and transforming it into a structured format for analysis.
+'''
+
 import re
 from collections import Counter
 
