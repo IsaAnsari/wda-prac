@@ -1,3 +1,8 @@
+'''
+PageRank is a foundational link analysis algorithm used in web data analytics 
+to measure the relative importance and authority of web pages within a network.
+'''
+
 import random
 
 web_graph = {
