@@ -1,5 +1,5 @@
 '''
-Create a spam.csv fileas shown below:
+Create a spam.csv file as shown below:
 
 label	message
 ham	hello how are you
